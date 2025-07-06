@@ -758,7 +758,6 @@ function loadMuseumModel() {
         model.scale.set(2, 2, 2);
         scene.add(model);
 
-        createHomeButton();
         createExhibitHotspots();
         createPictureHotspots();    
     
@@ -779,3 +778,7 @@ function animate(time) {
 }
 
 animate();
+document.addEventListener('DOMContentLoaded', function() {
+    createHomeButton();
+    console.log('DOMContentLoaded handler called');
+});
