@@ -301,9 +301,11 @@ renderer.domElement.addEventListener('mousemove', (e) => {
     const deltaX = e.clientX - previousMouseX;
     const deltaY = e.clientY - previousMouseY;
     
+   if (isFinite(deltaX) && isFinite(deltaY)) {
     camera.rotation.y -= deltaX * lookSpeed;
     camera.rotation.x -= deltaY * lookSpeed;
     camera.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, camera.rotation.x));
+}
     
     previousMouseX = e.clientX;
     previousMouseY = e.clientY;
@@ -356,11 +358,13 @@ let joystickLeft, joystickRight;
     });
 
     joystickRight.on('move', (evt, data) => {
-        camera.rotation.y -= data.vector.x * 0.05;
-        camera.rotation.x -= data.vector.y * 0.05;
-        camera.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, camera.rotation.x));
-    });
-}
+    if (!data.vector || !isFinite(data.vector.x) || !isFinite(data.vector.y)) return;
+
+    camera.rotation.y -= data.vector.x * 0.05;
+    camera.rotation.x -= data.vector.y * 0.05;
+    camera.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, camera.rotation.x));
+});
+
 
 // Handle window resize
 window.addEventListener('resize', () => {
@@ -781,6 +785,18 @@ function animate(time) {
     requestAnimationFrame(animate);
     const delta = (time - lastTime) / 1000;
     lastTime = time;
+
+    
+    // Check for NaN or Infinity in camera position or rotation
+    if (
+        !isFinite(camera.position.x) || !isFinite(camera.position.y) || !isFinite(camera.position.z) ||
+        !isFinite(camera.rotation.x) || !isFinite(camera.rotation.y) || !isFinite(camera.rotation.z)
+    ) {
+        console.warn("Resetting corrupted camera values");
+        camera.position.set(80.21954626648072, 39.0888887446244, 278.2953267000209);
+        camera.rotation.set(-0.17155681062643696, -0.013253588181707663, -0.0022962445718362895);
+        return; // Skip rendering this frame
+    }
     
     updateMovement(delta);
     renderer.render(scene, camera);
