@@ -282,9 +282,11 @@ const pictureHotspotData = [
     }
 ];
 
+//mouse click
+renderer.domElement.addEventListener('click', onMouseClick);
+
 // All controls
-// desktop controls
-// Mouse look 
+if(!isMobile){
 renderer.domElement.addEventListener('mousedown', (e) => {
     isDragging = true;
     previousMouseX = e.clientX;
@@ -326,10 +328,8 @@ document.addEventListener('keyup', (e) => {
         case 'KeyD': moveRight = false; break;
     }
 });
-
-//mouse click
-renderer.domElement.addEventListener('click', onMouseClick);
-
+}
+else{
 // Mobile controls
 let joystickLeft, joystickRight;
   if ('ontouchstart' in window) {
@@ -359,7 +359,7 @@ let joystickLeft, joystickRight;
         camera.rotation.x -= data.vector.y * 0.05;
         camera.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, camera.rotation.x));
     });
-}
+} }
 
 // Handle window resize
 window.addEventListener('resize', () => {
@@ -765,9 +765,7 @@ function loadMuseumModel() {
 
         createHomeButton();
         createExhibitHotspots();
-        createPictureHotspots();
-        
-        
+        createPictureHotspots();    
     
     }, undefined, (error) => {
         console.error('Error loading museum model:', error);
