@@ -48,7 +48,7 @@ let isAnimating = false;
 let currentExhibit = null;
 const audioLoader = new THREE.AudioLoader();
 const audioListener = new THREE.AudioListener();
-camera.add(audioListener);
+scene.add(audioListener);
 const sound = new THREE.Audio(audioListener);
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
