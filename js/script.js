@@ -714,11 +714,6 @@ const loadingManager = new THREE.LoadingManager(
         // When all assets are loaded
         updateLoadingProgress(1);
         console.log('loadingManager onLoad called');
-    },
-    (item, loaded, total) => {
-        // Progress update
-        updateLoadingProgress(loaded / total);
-        console.log('loadingManager onProgress called');
     }
 );
 
